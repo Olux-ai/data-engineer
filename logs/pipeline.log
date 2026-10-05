@@ -1,0 +1,4 @@
+2026-10-05 21:44:12,176 | INFO | Payment data ingestion pipeline started
+2026-10-05 21:44:12,255 | INFO | Source data loaded successfully: 10,000 records
+2026-10-05 21:44:12,456 | INFO | Raw dataset written successfully: 10,000 records
+2026-10-05 21:44:12,492 | INFO | Payment data ingestion pipeline completed successfully

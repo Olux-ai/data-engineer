@@ -1,8 +1,18 @@
 import os
+import logging
 import pandas as pd
 
+logging.basicConfig(
+  filename="logs/pipeline.log",
+  level=logging.INFO,
+  format="%(asctime)s | %(levelname)s | %(message)s"
+)
+
+logger = logging.getLogger(__name__)
+
 def run_ingestion_pipeline():
-  print(" Starting Payment Data Ingestion Pipeline...")
+  print("📥 Starting Payment Data Ingestion Pipeline...")
+  logger.info("Payment data ingestion pipeline started")
   
   # Define exact path structures
   SOURCE_PATH = "data/source/payments.csv"
@@ -10,7 +20,8 @@ def run_ingestion_pipeline():
   
   # 1. Check if the source file exists
   if not os.path.isfile(SOURCE_PATH):
-    print(f" CRITICAL ERROR: Source file not found at '{SOURCE_PATH}'.")
+    print(f"❌ CRITICAL ERROR: Source file not found at '{SOURCE_PATH}'.")
+    logger.error(f"Source file not found: {SOURCE_PATH}")
     print("Please run your 'generate_payments.py' script first to build the source file.")
     return
 
@@ -22,6 +33,8 @@ def run_ingestion_pipeline():
     # 3. Count records
     record_count = len(df_raw)
     
+    logger.info(f"Source data loaded successfully: {record_count:,} records")
+    
     # 4. Write exactly to data/raw/payments.csv (Preserving raw state)
     print(f" Writing raw dataset to storage path: '{RAW_PATH}'...")
     
@@ -31,6 +44,7 @@ def run_ingestion_pipeline():
     # Save file without touching row indexing structure
     df_raw.to_csv(RAW_PATH, index=False)
     print(" File written successfully.")
+    logger.info(f"Raw dataset written successfully: {record_count:,} records")
     
     # 5. Print ingestion summary matrix
     print("\n=============================================")
@@ -42,10 +56,13 @@ def run_ingestion_pipeline():
     print(f"• Ingestion time:       {pd.Timestamp.now()} ...")
     print(f"• Total Rows Loaded:  {record_count:,} records")
     print("=============================================")
+    
+    logger.info("Payment data ingestion pipeline completed successfully")
       
   except Exception as e:
     print(f" CRITICAL ERROR: Ingestion failed due to a pipeline exception.")
     print(f"Details: {str(e)}")
+    logger.error(f"Ingestion pipeline failed: {str(e)}")
 
 if __name__ == "__main__":
   run_ingestion_pipeline()
