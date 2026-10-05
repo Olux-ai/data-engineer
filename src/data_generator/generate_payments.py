@@ -66,7 +66,7 @@ def generate_payment_data(num_records=10000):
     
     # Save file
     df.to_csv(output_path, index=False)
-    print(f"✅ Production dataset saved successfully to: '{output_path}'")
+    print(f" Production dataset saved successfully to: '{output_path}'")
     
     # Show structural diagnostics to confirm code execution matches your setup
     print("\n--- TRANSACTION STATUS DISTRIBUTION MATCH ---")
@@ -74,6 +74,15 @@ def generate_payment_data(num_records=10000):
     
     print("\n--- CURRENCY DISTRIBUTION MATCH ---")
     print(df['currency'].value_counts(normalize=True).round(2) * 100)
+    
+    print("Total records:", len(df))
+    print("Unique payment IDs:", df["payment_id"].nunique())
+    print("Unique customers:", df["customer_id"].nunique())
+    print("Unique merchants:", df["merchant_id"].nunique())
+
+    print("Earliest:", df["created_at"].min())
+    print("Latest:", df["created_at"].max())
+    print("Duplicate payment IDs:", df["payment_id"].duplicated().sum())
 
 if __name__ == "__main__":
     generate_payment_data()

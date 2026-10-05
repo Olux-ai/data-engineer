@@ -1,0 +1,6 @@
+data/source/*.csv
+data/raw/*.csv
+data/processed/*.csv
+data/rejected/*.csv
+__pycache__/
+*.pyc
