@@ -161,7 +161,13 @@ def generate_payment_attempts(payment: Dict[str, Any], planned_attempts: int) ->
       payment_attempt_id = create_attempt_id(payment_id, attempt_number)
       created_at_str = current_time.isoformat().replace("+00:00", "Z")
 
-      error_code = select_error_code()
+      is_final_attempt = attempt_number == planned_attempts
+
+      if is_final_attempt:
+        error_code = select_error_code(retryable_only=False)
+      else:
+        error_code = select_error_code(retryable_only=True)
+
       is_retryable = is_retryable_error(error_code)
 
       completed_at_dt = current_time + timedelta(seconds=random.uniform(2, 15))
